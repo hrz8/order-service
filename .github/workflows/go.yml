@@ -1,0 +1,56 @@
+name: golang pipeline
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    name: lint test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        name: checkout
+
+      - uses: actions/setup-go@v3
+        name: setup go
+        with:
+          go-version: '1.16'
+
+      - run: make lint
+        name: go tidy
+
+  unit_test:
+    needs:
+      - lint
+    name: unit test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        name: checkout
+
+      - uses: actions/setup-go@v3
+        name: setup go
+        with:
+          go-version: '1.16'
+
+      - run: make test
+        name: go unit test
+
+  binary_build:
+    needs:
+      - unit_test
+    name: build go binary
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        name: checkout
+
+      - uses: actions/setup-go@v3
+        name: setup go
+        with:
+          go-version: '1.16'
+
+      - run: make build
+        name: build go binary file

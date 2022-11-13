@@ -1,0 +1,20 @@
+package main
+
+import (
+	"net/http"
+
+	"github.com/labstack/echo/v4"
+)
+
+func main() {
+	e := echo.New()
+	e.GET("/api/v1/ping", func(c echo.Context) error {
+		return c.JSON(http.StatusOK, struct{ Status string }{Status: "Ok"})
+	})
+
+	e.GET("/api/v1/hello-again", func(c echo.Context) error {
+		return c.JSON(http.StatusOK, struct{ Status string }{Status: "Hello!"})
+	})
+
+	e.Logger.Fatal(e.Start(":8080"))
+}
