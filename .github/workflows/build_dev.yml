@@ -1,0 +1,28 @@
+name: golang pipeline
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      stage:
+        description: 'stage to deploy'
+        required: true
+        default: 'dev-id'
+        type: choice
+        options:
+        - dev-id
+        - dev-sg
+
+jobs:
+  image_push:
+    needs:
+      - binary_build
+    name: push image
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Service Stage: $SERVICE_STAGE"
+        env:
+          SERVICE_STAGE: ${{ inputs.stage }}
