@@ -1,10 +1,12 @@
-name: golang pipeline
+name: deploy dev
 
 on:
-  pull_request:
-    branches:
-      - main
   workflow_dispatch:
+    branches:
+      - 'master'
+      - 'feat/*'
+      - 'fix/*'
+      - 'ref/*'
     inputs:
       stage:
         description: 'stage to deploy'
@@ -12,13 +14,11 @@ on:
         default: 'dev-id'
         type: choice
         options:
-        - dev-id
-        - dev-sg
+          - dev-id
+          - dev-sg
 
 jobs:
   image_push:
-    needs:
-      - binary_build
     name: push image
     runs-on: ubuntu-latest
     steps:
