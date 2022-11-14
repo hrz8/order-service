@@ -32,7 +32,7 @@ jobs:
 
       - name: set dev tag
         run: |
-          echo "TIMESTAMP=$(date +%s)" >> $GITHUB_ENV
+          echo "TIMESTAMP=$(+%Y-%m-%d.%s)" >> $GITHUB_ENV
 
       - name: login gcloud
         uses: google-github-actions/auth@v1
