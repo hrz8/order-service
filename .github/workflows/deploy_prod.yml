@@ -2,10 +2,8 @@ name: deploy prod
 
 on:
   workflow_dispatch:
-    branches:
-      - 'master'
     tags:
-      - '*'
+      - '**'
     inputs:
       stage:
         description: 'stage to deploy'
@@ -15,13 +13,36 @@ on:
         options:
           - prod-id
           - prod-sg
+      tag:
+        description: 'image tag'
+        required: true
+        type: string
 
 jobs:
   image_push:
     name: push image
     runs-on: ubuntu-latest
+    env:
+      PROJECT_ID: 'hello-gcp-367807'
+      SERVICE_NAME: 'order-service'
+      SERVICE_STAGE: ${{ inputs.stage }}
+      IMAGE_TAG: ${{ inputs.tag }}
     steps:
-      - run: |
-          echo "Service Stage: $SERVICE_STAGE"
-        env:
-          SERVICE_STAGE: ${{ inputs.stage }}
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: login gcloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_CREDS }}
+
+      - name: setup gcloud
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+
+      - name: build docker image
+        run: make build-image-prod
+
+      - name: push docker image
+        run: make push-image-prod

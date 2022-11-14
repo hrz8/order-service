@@ -16,10 +16,6 @@ on:
         options:
           - dev-id
           - dev-sg
-      tag:
-        description: 'image tag'
-        required: true
-        type: string
 
 jobs:
   image_push:
@@ -45,7 +41,7 @@ jobs:
           project_id: ${{ env.PROJECT_ID }}
 
       - name: build docker image
-        run: make build-image
+        run: make build-image-dev
 
       - name: push docker image
         run: make push-image-dev
