@@ -4,6 +4,8 @@ on:
   workflow_dispatch:
     branches:
       - 'master'
+    tags:
+      - '*'
     inputs:
       stage:
         description: 'stage to deploy'
