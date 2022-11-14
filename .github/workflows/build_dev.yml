@@ -2,7 +2,7 @@ name: docker build
 
 on:
   workflow_dispatch:
-    workflows: ["golang pipeline"]
+    workflows: ["main pipeline"]
     types: 
       - completed
     inputs:
