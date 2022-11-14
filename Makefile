@@ -1,5 +1,3 @@
-TIMESTAMP=`date +%s`
-
 lint:
 	go mod tidy
 
