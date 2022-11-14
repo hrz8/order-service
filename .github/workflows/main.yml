@@ -21,9 +21,7 @@ jobs:
         with:
           go-version: '1.16'
 
-      - run: |
-          echo "Github Workspace: $GITHUB_WORKSPACE"
-          make lint
+      - run: make lint
         name: go tidy
 
   unit_test:

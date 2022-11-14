@@ -1,19 +1,10 @@
 name: docker build
 
 on:
-  push:
-    branches: 
-      - master
-  pull_request:
-    branches:
-      - master
-  workflow_run:
+  workflow_dispatch:
     workflows: ["golang pipeline"]
-    branches:
-      - master
     types: 
       - completed
-  workflow_dispatch:
     inputs:
       stage:
         description: 'stage to deploy'
