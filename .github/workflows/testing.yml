@@ -2,8 +2,6 @@ name: testing
 
 on:
   push:
-    tags:
-      - '*'
     branches: 
       - master
   pull_request:
