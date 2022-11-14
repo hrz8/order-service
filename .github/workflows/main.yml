@@ -2,6 +2,8 @@ name: main pipeline
 
 on:
   push:
+    tags:
+      - '*'
     branches: 
       - master
   pull_request:
@@ -54,6 +56,9 @@ jobs:
         name: setup go
         with:
           go-version: '1.16'
+
+      - run: make install
+        name: install dependencies
 
       - run: make build
         name: build go binary file

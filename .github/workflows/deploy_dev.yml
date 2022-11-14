@@ -1,10 +1,12 @@
-name: docker build
+name: deploy dev
 
 on:
   workflow_dispatch:
-    workflows: ["main pipeline"]
-    types: 
-      - completed
+    branches:
+      - 'master'
+      - 'feat/*'
+      - 'fix/*'
+      - 'ref/*'
     inputs:
       stage:
         description: 'stage to deploy'
@@ -12,8 +14,8 @@ on:
         default: 'dev-id'
         type: choice
         options:
-        - dev-id
-        - dev-sg
+          - dev-id
+          - dev-sg
 
 jobs:
   image_push:

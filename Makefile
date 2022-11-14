@@ -11,6 +11,9 @@ lint:
 test:
 	go test ./...
 
+install:
+	go mod download
+
 build:
 	go build -o bin/server src/server.go
 
