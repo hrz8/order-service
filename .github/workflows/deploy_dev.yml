@@ -34,12 +34,15 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
 
+      - name: login gcloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_CREDS }}
+
       - name: setup gcloud
         uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: ${{ env.PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_CREDS }}
-          export_default_credentials: true
 
       - name: build docker image
         run: make build-image
