@@ -1,4 +1,4 @@
-name: golang pipeline
+name: main pipeline
 
 on:
   push:
@@ -21,7 +21,9 @@ jobs:
         with:
           go-version: '1.16'
 
-      - run: make lint
+      - run: |
+          echo "Github Workspace: $GITHUB_WORKSPACE"
+          make lint
         name: go tidy
 
   unit_test:
