@@ -16,13 +16,33 @@ on:
         options:
           - dev-id
           - dev-sg
+      tag:
+        description: 'image tag'
+        required: true
+        type: string
 
 jobs:
   image_push:
     name: push image
     runs-on: ubuntu-latest
+    env:
+      PROJECT_ID: 'hello-gcp-367807'
+      SERVICE_NAME: 'order-service'
+      SERVICE_STAGE: ${{ inputs.stage }}
+      IMAGE_TAG: ${{ inputs.tag }}
     steps:
-      - run: |
-          echo "Service Stage: $SERVICE_STAGE"
-        env:
-          SERVICE_STAGE: ${{ inputs.stage }}
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: setup gcloud
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_CREDS }}
+          export_default_credentials: true
+
+      - name: build docker image
+        run: make build-image
+
+      - name: push docker image
+        run: make push-image-dev
