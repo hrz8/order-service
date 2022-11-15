@@ -1,9 +1,9 @@
 variable "stage" {
-  type = string
+  type    = string
   default = "dev-id"
 }
 
 variable "image_version" {
-  type = string
+  type    = string
   default = "latest"
 }
