@@ -8,7 +8,6 @@ terraform {
 }
 
 provider "google" {
-  # credentials = file("creds.json")
   project = local.project_id
   region  = local.stages[var.stage].region
 }

@@ -1,10 +1,10 @@
 locals {
-  project_id    = "hello-gcp-367807"
-  service_name  = "order-service"
+  project_id    = var.project_id
+  service_name  = var.service_name
   service_alias = format("%s-%s", local.service_name, var.stage)
 
   # gcp set up
-  service_account = format("service-invoker@%s.iam.gserviceaccount.com", local.project_id)
+  service_account = var.service_account
 
   # image setup
   image_name     = format("%s:%s", local.service_alias, var.image_version)
