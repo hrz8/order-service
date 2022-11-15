@@ -24,4 +24,4 @@ pre-deploy:
 	terraform plan -no-color -input=false
 
 deploy-dev:
-	terraform apply -auto-approve -input=false
+	terraform apply -var image_version=${IMAGE_TAG} -auto-approve -input=false

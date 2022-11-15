@@ -60,7 +60,6 @@ jobs:
     env:
       SERVICE_STAGE: ${{ inputs.stage }}
       GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-      TF_VAR_image_version: ${{ env.IMAGE_TAG }}
     steps:
       - name: checkout
         uses: actions/checkout@v3
