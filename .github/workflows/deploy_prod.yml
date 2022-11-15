@@ -42,7 +42,7 @@ jobs:
           project_id: ${{ env.PROJECT_ID }}
 
       - name: build docker image
-        run: make build-image-prod
+        run: make build-image
 
       - name: push docker image
-        run: make push-image-prod
+        run: make push-image

@@ -25,19 +25,18 @@ jobs:
       PROJECT_ID: 'hello-gcp-367807'
       SERVICE_NAME: 'order-service'
       SERVICE_STAGE: ${{ inputs.stage }}
-      IMAGE_TAG: ${{ inputs.tag }}
     steps:
       - name: checkout
         uses: actions/checkout@v3
 
       - name: set dev tag
         run: |
-          echo "TIMESTAMP=$(date +%Y-%m-%d.%s)" >> $GITHUB_ENV
+          echo "IMAGE_TAG=$(date +%Y-%m-%d.%s)" >> $GITHUB_ENV
 
       - name: login gcloud
         uses: google-github-actions/auth@v1
         with:
-          credentials_json: ${{ secrets.GCP_CREDS }}
+          credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - name: setup gcloud
         uses: google-github-actions/setup-gcloud@v1
@@ -45,7 +44,42 @@ jobs:
           project_id: ${{ env.PROJECT_ID }}
 
       - name: build docker image
-        run: make build-image-dev
+        run: make build-image
 
       - name: push docker image
-        run: make push-image-dev
+        run: make push-image
+
+  terraform_deploy:
+    name: deploy with terraform
+    needs:
+      - image_push
+    runs-on: ubuntu-latest
+    env:
+      GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: setup terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: terraform init
+        run: terraform init
+
+      - name: terraform format
+        run: terraform fmt -check
+
+      - name: terraform validation
+        run: terraform validate -no-color
+
+      - name: terraform plan
+        id: plan
+        run: make pre-deploy
+        continue-on-error: true
+
+      - name: terraform plan status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+      # - name: terraform apply
+      #   run: make deploy-dev
