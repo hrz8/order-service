@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -9,6 +10,7 @@ import (
 func main() {
 	e := echo.New()
 	e.GET("/api/v1/ping", func(c echo.Context) error {
+		fmt.Println("ini log ya...")
 		return c.JSON(http.StatusOK, struct{ Status string }{Status: "Ok"})
 	})
 

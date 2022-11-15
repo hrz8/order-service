@@ -32,7 +32,7 @@ jobs:
       - name: set tag
         id: set_tag
         run: |
-          echo "tag=$(date +%Y-%m-%d.%s)" >> $GITHUB_OUTPUT
+          echo "tag=$(date +%Y-%m-%d.%H%M%S)" >> $GITHUB_OUTPUT
 
   image_push:
     name: push image
