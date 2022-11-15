@@ -16,8 +16,8 @@ locals {
       name   = "dev-id"
       region = "us-central1"
     }
-    dev_sg = {
-      name   = "dev_sg"
+    dev-sg = {
+      name   = "dev-sg"
       region = "us-central1"
     }
   }
