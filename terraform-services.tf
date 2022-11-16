@@ -107,4 +107,11 @@ resource "google_api_gateway_api_config" "api" {
   lifecycle {
     create_before_destroy = true
   }
+
+  depends_on = [
+    google_project_service.apigateway,
+    google_project_service.servicemanagement,
+    google_project_service.servicecontrol,
+    google_cloud_run_service.service
+  ]
 }
