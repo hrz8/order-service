@@ -41,7 +41,7 @@ resource "google_api_gateway_api_config" "api" {
 
   openapi_documents {
     document {
-      path     = "spec.yaml"
+      path = "spec.yaml"
       contents = base64encode(<<-EOF
         swagger: '2.0'
         info:
