@@ -7,10 +7,10 @@ terraform {
   }
 
   cloud {
-    organization = var.organization
+    organization = "hrz8-org"
 
     workspaces {
-      name = local.service_alias
+      name = "order-service"
     }
   }
 }
