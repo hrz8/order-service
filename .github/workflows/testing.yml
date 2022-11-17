@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TF_WORKSPACE: "${{ secrets.SERVICE_NAME }}-dev-id"
-      GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+      GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -70,7 +70,7 @@ jobs:
         run: terraform plan -no-color -input=false
         continue-on-error: true
 
-      - name: Update Pull Request
+      - name: comment pr
         uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
         env:
@@ -78,12 +78,12 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-            #### Terraform Plan 📖\`${{ steps.tf_plan.outcome }}\`
-            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+            const output = `#### terraform formatting and styling 🖌 \`${{ steps.tf_fmt.outcome }}\`
+            #### terraform initialization ⚙️ \`${{ steps.tf_init.outcome }}\`
+            #### terraform plan 📖 \`${{ steps.tf_plan.outcome }}\`
+            #### terraform validation 🤖 \`${{ steps.tf_validate.outcome }}\`
       
-            <details><summary>Show Plan</summary>
+            <details><summary>show plan</summary>
       
             \`\`\`\n
             ${process.env.PLAN}
@@ -91,7 +91,7 @@ jobs:
       
             </details>
       
-            *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+            *pushed by: @${{ github.actor }}, action: \`${{ github.event_name }}\`*`;
       
             github.rest.issues.createComment({
               issue_number: context.issue.number,
