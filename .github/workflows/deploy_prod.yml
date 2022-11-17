@@ -19,6 +19,7 @@ on:
         type: string
 
 env:
+  ORGANIZATION: ${{ secrets.TF_ORGANIZATION }}
   PROJECT_ID: ${{ secrets.PROJECT_ID }}
   SERVICE_NAME: ${{ secrets.SERVICE_NAME }}
   SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}

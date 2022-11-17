@@ -5,6 +5,14 @@ terraform {
       version = "4.42.1"
     }
   }
+
+  cloud {
+    organization = var.organization
+
+    workspaces {
+      name = local.service_alias
+    }
+  }
 }
 
 provider "google" {
