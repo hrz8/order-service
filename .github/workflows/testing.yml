@@ -15,7 +15,6 @@ env:
   SERVICE_NAME: ${{ secrets.SERVICE_NAME }}
   SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
   TF_CLOUD_ORGANIZATION: ${{ secrets.TF_CLOUD_ORGANIZATION }}
-  TF_WORKSPACE: "${{  }}"
 
 jobs:
   lint:
