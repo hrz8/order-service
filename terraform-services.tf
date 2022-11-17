@@ -24,7 +24,6 @@ resource "google_cloud_run_service" "service" {
 
 resource "google_api_gateway_api" "api" {
   provider = google-beta
-  project  = local.project_id
   api_id   = format("%s-api-gw", local.service_alias)
 
   depends_on = [
@@ -35,9 +34,8 @@ resource "google_api_gateway_api" "api" {
   ]
 }
 
-resource "google_api_gateway_api_config" "api" {
+resource "google_api_gateway_api_config" "api_cfg" {
   provider      = google-beta
-  project       = local.project_id
   api           = google_api_gateway_api.api.api_id
   api_config_id = format("%s-api-gw-cfg", local.service_alias)
 
@@ -120,8 +118,7 @@ resource "google_api_gateway_api_config" "api" {
 
 resource "google_api_gateway_gateway" "api_gw" {
   provider   = google-beta
-  project    = local.project_id
-  api_config = google_api_gateway_api_config.api.id
+  api_config = google_api_gateway_api_config.api_cfg.id
   gateway_id = format("%s-api-gw", local.service_alias)
 
   depends_on = [
