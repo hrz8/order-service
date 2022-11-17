@@ -37,8 +37,8 @@ resource "google_api_gateway_api" "api" {
 
 resource "google_api_gateway_api_config" "api" {
   provider      = google-beta
-  api           = google_api_gateway_api.api.api_id
   project       = local.project_id
+  api           = google_api_gateway_api.api.api_id
   api_config_id = format("%s-api-gw-cfg", local.service_alias)
 
   openapi_documents {
@@ -120,6 +120,7 @@ resource "google_api_gateway_api_config" "api" {
 
 resource "google_api_gateway_gateway" "api_gw" {
   provider   = google-beta
+  project    = local.project_id
   api_config = google_api_gateway_api_config.api.id
   gateway_id = format("%s-api-gw", local.service_alias)
 
