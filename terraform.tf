@@ -5,6 +5,10 @@ terraform {
       version = "4.42.1"
     }
   }
+
+  cloud {
+    hostname = "app.terraform.io"
+  }
 }
 
 provider "google" {

@@ -25,7 +25,7 @@ resource "google_cloud_run_service" "service" {
 resource "google_api_gateway_api" "api" {
   provider = google-beta
   project  = local.project_id
-  api_id   = format("%s_api_gw", local.service_alias_snake_case)
+  api_id   = format("%s-api-gw", local.service_alias)
 
   depends_on = [
     google_project_service.apigateway,
@@ -39,7 +39,7 @@ resource "google_api_gateway_api_config" "api" {
   provider      = google-beta
   api           = google_api_gateway_api.api.api_id
   project       = local.project_id
-  api_config_id = format("%s_api_gw_cfg", local.service_alias_snake_case)
+  api_config_id = format("%s-api-gw-cfg", local.service_alias)
 
   openapi_documents {
     document {
