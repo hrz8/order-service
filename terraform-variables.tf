@@ -2,7 +2,7 @@ locals {
   project_id               = var.project_id
   service_name             = var.service_name
   service_alias            = format("%s-%s", local.service_name, var.stage)
-  service_alias_snake_case = format("%s_%s", local.service_name, var.stage)
+  service_alias_snake_case = format("%s_%s", local.service_name, local.stages[var.stage].name_snake_case)
 
   # gcp set up
   service_account = var.service_account
@@ -14,12 +14,14 @@ locals {
   # stage variables
   stages = {
     dev-id = {
-      name   = "dev-id"
-      region = "us-central1"
+      name            = "dev-id"
+      name_snake_case = "dev_id"
+      region          = "us-central1"
     }
     dev-sg = {
-      name   = "dev-sg"
-      region = "us-central1"
+      name            = "dev-sg"
+      name_snake_case = "dev_sg"
+      region          = "us-central1"
     }
   }
 }
