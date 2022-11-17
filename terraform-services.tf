@@ -45,8 +45,8 @@ resource "google_api_gateway_api_config" "api_cfg" {
       contents = base64encode(<<-EOF
         swagger: '2.0'
         info:
-          title: order_service_api_gw Order Service
-          description: 'Endpoint documentation of order service'
+          title: ${format("%s-api-gw", local.service_alias)}
+          description: 'Endpoint documentation of ${local.service_name}'
           version: '1.0.0'
         produces:
           - application/json
@@ -61,7 +61,7 @@ resource "google_api_gateway_api_config" "api_cfg" {
               operationId: ping
               responses:
                 200:
-                  description: Success
+                  description: OK
                   schema:
                     type: object
                     properties:
@@ -77,7 +77,7 @@ resource "google_api_gateway_api_config" "api_cfg" {
               operationId: helloAgain
               responses:
                 200:
-                  description: Success
+                  description: OK
                   schema:
                     type: object
                     properties:
@@ -86,13 +86,6 @@ resource "google_api_gateway_api_config" "api_cfg" {
                         example: 'Ok'
                 400:
                   description: Bad Request
-        securityDefinitions:
-          APIKey:
-            type: apiKey
-            name: key
-            in: query
-        security:
-          - APIKey: []
       EOF
       )
     }
@@ -122,9 +115,6 @@ resource "google_api_gateway_gateway" "api_gw" {
   gateway_id = format("%s-api-gw", local.service_alias)
 
   depends_on = [
-    google_project_service.apigateway,
-    google_project_service.servicemanagement,
-    google_project_service.servicecontrol,
-    google_cloud_run_service.service
+    google_api_gateway_api_config.api_cfg
   ]
 }
