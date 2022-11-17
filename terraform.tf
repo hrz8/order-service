@@ -5,14 +5,6 @@ terraform {
       version = "4.42.1"
     }
   }
-
-  cloud {
-    organization = "hrz8-org"
-
-    workspaces {
-      name = "order-service"
-    }
-  }
 }
 
 provider "google" {

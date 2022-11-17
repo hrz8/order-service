@@ -19,10 +19,10 @@ on:
         type: string
 
 env:
-  ORGANIZATION: ${{ secrets.TF_ORGANIZATION }}
   PROJECT_ID: ${{ secrets.PROJECT_ID }}
   SERVICE_NAME: ${{ secrets.SERVICE_NAME }}
   SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
+  TF_CLOUD_ORGANIZATION: ${{ secrets.TF_CLOUD_ORGANIZATION }}
 
 jobs:
   image_push:

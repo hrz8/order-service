@@ -18,10 +18,10 @@ on:
           - dev-sg
 
 env:
-  ORGANIZATION: ${{ secrets.TF_ORGANIZATION }}
   PROJECT_ID: ${{ secrets.PROJECT_ID }}
   SERVICE_NAME: ${{ secrets.SERVICE_NAME }}
   SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
+  TF_CLOUD_ORGANIZATION: ${{ secrets.TF_CLOUD_ORGANIZATION }}
 
 jobs:
   build_tag:
@@ -67,12 +67,13 @@ jobs:
         run: make push-image
 
   terraform_deploy:
-    name: deploy with terraform
+    name: terraform deploy
     needs:
       - build_tag
       - image_push
     runs-on: ubuntu-latest
     env:
+      TF_WORKSPACE: "${{ secrets.SERVICE_NAME }}-${{ inputs.stage }}"
       SERVICE_STAGE: ${{ inputs.stage }}
       GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
     steps:
@@ -81,10 +82,11 @@ jobs:
 
       - name: setup terraform
         uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
       
       - name: set up terraform env
         run: |
-          echo "TF_VAR_organization=${ORGANIZATION}" >> $GITHUB_ENV
           echo "TF_VAR_project_id=${PROJECT_ID}" >> $GITHUB_ENV
           echo "TF_VAR_service_name=${SERVICE_NAME}" >> $GITHUB_ENV
           echo "TF_VAR_service_account=${SERVICE_ACCOUNT}" >> $GITHUB_ENV
