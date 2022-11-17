@@ -8,7 +8,7 @@ locals {
   service_account = var.service_account
 
   # image setup
-  image_name     = format("%s:%s", local.service_alias, var.image_version)
+  image_name     = format("%s:latest", local.service_alias)
   image_registry = format("gcr.io/%s/%s", local.project_id, local.image_name)
 
   # stage variables
