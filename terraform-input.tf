@@ -15,7 +15,7 @@ variable "stage" {
   default = "dev-id"
 }
 
-variable "image_version" {
+variable "image_tag" {
   type    = string
   default = "latest"
 }
