@@ -98,7 +98,7 @@ resource "google_api_gateway_api_config" "api_cfg" {
   }
 
   lifecycle {
-    create_before_destroy = true
+    create_before_destroy = false
   }
 
   depends_on = [
