@@ -75,7 +75,7 @@ jobs:
     env:
       TF_WORKSPACE: "${{ secrets.SERVICE_NAME }}-${{ inputs.stage }}"
       SERVICE_STAGE: ${{ inputs.stage }}
-      GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+      GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
     steps:
       - name: checkout
         uses: actions/checkout@v3

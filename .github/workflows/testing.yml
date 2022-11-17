@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TF_WORKSPACE: "${{ secrets.SERVICE_NAME }}-dev-id"
-      GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+      GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -70,7 +70,7 @@ jobs:
         run: terraform plan -no-color -input=false
         continue-on-error: true
 
-      - name: Update Pull Request
+      - name: comment pr
         uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
         env:
