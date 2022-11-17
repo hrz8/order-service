@@ -22,96 +22,96 @@ resource "google_cloud_run_service" "service" {
   ]
 }
 
-resource "google_api_gateway_api" "api" {
-  provider = google-beta
-  api_id   = format("%s_api_gw", local.service_alias_snake_case)
+# resource "google_api_gateway_api" "api" {
+#   provider = google-beta
+#   api_id   = format("%s_api_gw", local.service_alias_snake_case)
 
-  depends_on = [
-    google_project_service.apigateway,
-    google_project_service.servicemanagement,
-    google_project_service.servicecontrol,
-    google_cloud_run_service.service
-  ]
-}
+#   depends_on = [
+#     google_project_service.apigateway,
+#     google_project_service.servicemanagement,
+#     google_project_service.servicecontrol,
+#     google_cloud_run_service.service
+#   ]
+# }
 
-resource "google_api_gateway_api_config" "api" {
-  provider      = google-beta
-  api           = google_api_gateway_api.api.api_id
-  api_config_id = format("%s_api_gw_cfg", local.service_alias_snake_case)
+# resource "google_api_gateway_api_config" "api" {
+#   provider      = google-beta
+#   api           = google_api_gateway_api.api.api_id
+#   api_config_id = format("%s_api_gw_cfg", local.service_alias_snake_case)
 
-  openapi_documents {
-    document {
-      path = "spec.yaml"
-      contents = base64encode(<<-EOF
-        swagger: '2.0'
-        info:
-          title: order_service_api_gw Order Service
-          description: 'Endpoint documentation of order service'
-          version: '1.0.0'
-        produces:
-          - application/json
-        x-google-backend:
-          address: ${google_cloud_run_service.service.status[0].url}
-        basePath: /api/v1
-        paths:
-          '/ping':
-            get:
-              summary: Ping the server
-              description: 'Ping the server 🚀'
-              operationId: ping
-              responses:
-                200:
-                  description: Success
-                  schema:
-                    type: object
-                    properties:
-                      Success:
-                        type: string
-                        example: 'Ok'
-                400:
-                  description: Bad Request
-          '/hello-again':
-            get:
-              summary: Helloing the server
-              description: 'Helloing the server 🙋‍♂️'
-              operationId: helloAgain
-              responses:
-                200:
-                  description: Success
-                  schema:
-                    type: object
-                    properties:
-                      Success:
-                        type: string
-                        example: 'Ok'
-                400:
-                  description: Bad Request
-        securityDefinitions:
-          APIKey:
-            type: apiKey
-            name: key
-            in: query
-        security:
-          - APIKey: []
-      EOF
-      )
-    }
-  }
+#   openapi_documents {
+#     document {
+#       path = "spec.yaml"
+#       contents = base64encode(<<-EOF
+#         swagger: '2.0'
+#         info:
+#           title: order_service_api_gw Order Service
+#           description: 'Endpoint documentation of order service'
+#           version: '1.0.0'
+#         produces:
+#           - application/json
+#         x-google-backend:
+#           address: ${google_cloud_run_service.service.status[0].url}
+#         basePath: /api/v1
+#         paths:
+#           '/ping':
+#             get:
+#               summary: Ping the server
+#               description: 'Ping the server 🚀'
+#               operationId: ping
+#               responses:
+#                 200:
+#                   description: Success
+#                   schema:
+#                     type: object
+#                     properties:
+#                       Success:
+#                         type: string
+#                         example: 'Ok'
+#                 400:
+#                   description: Bad Request
+#           '/hello-again':
+#             get:
+#               summary: Helloing the server
+#               description: 'Helloing the server 🙋‍♂️'
+#               operationId: helloAgain
+#               responses:
+#                 200:
+#                   description: Success
+#                   schema:
+#                     type: object
+#                     properties:
+#                       Success:
+#                         type: string
+#                         example: 'Ok'
+#                 400:
+#                   description: Bad Request
+#         securityDefinitions:
+#           APIKey:
+#             type: apiKey
+#             name: key
+#             in: query
+#         security:
+#           - APIKey: []
+#       EOF
+#       )
+#     }
+#   }
 
-  gateway_config {
-    backend_config {
-      google_service_account = local.service_account
-    }
-  }
+#   gateway_config {
+#     backend_config {
+#       google_service_account = local.service_account
+#     }
+#   }
 
-  lifecycle {
-    create_before_destroy = true
-  }
+#   lifecycle {
+#     create_before_destroy = true
+#   }
 
-  depends_on = [
-    google_project_service.apigateway,
-    google_project_service.servicemanagement,
-    google_project_service.servicecontrol,
-    google_cloud_run_service.service
-  ]
-}
+#   depends_on = [
+#     google_project_service.apigateway,
+#     google_project_service.servicemanagement,
+#     google_project_service.servicecontrol,
+#     google_cloud_run_service.service
+#   ]
+# }
