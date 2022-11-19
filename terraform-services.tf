@@ -109,7 +109,6 @@ resource "google_api_gateway_api_config" "api_cfg_0" {
     google_project_service.servicemanagement,
     google_project_service.servicecontrol,
     google_cloud_run_service.service,
-    google_api_gateway_gateway.api_gw
   ]
 }
 
@@ -117,4 +116,8 @@ resource "google_api_gateway_gateway" "api_gw" {
   provider   = google-beta
   api_config = google_api_gateway_api_config.api_cfg_0.id
   gateway_id = format("%s-api-gw", local.service_alias)
+
+  lifecycle {
+    ignore_changes = [gateway_id]
+  }
 }
