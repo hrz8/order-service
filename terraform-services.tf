@@ -118,6 +118,6 @@ resource "google_api_gateway_gateway" "api_gw" {
   gateway_id = format("%s-api-gw", local.service_alias)
 
   depends_on = [
-    google_api_gateway_api_config.api_cfg_0.api_cfg
+    google_api_gateway_api_config.api_cfg_0
   ]
 }
