@@ -51,3 +51,50 @@ jobs:
 
       - name: push docker image
         run: make push-image
+
+  terraform_deploy:
+    name: terraform deploy
+    needs:
+      - image_push
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    env:
+      TF_WORKSPACE: "${{ secrets.SERVICE_NAME }}-${{ inputs.stage }}"
+      SERVICE_STAGE: ${{ inputs.stage }}
+      GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: setup terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      
+      - name: set up terraform env
+        run: |
+          echo "TF_VAR_project_id=${PROJECT_ID}" >> $GITHUB_ENV
+          echo "TF_VAR_service_name=${SERVICE_NAME}" >> $GITHUB_ENV
+          echo "TF_VAR_service_account=${SERVICE_ACCOUNT}" >> $GITHUB_ENV
+          echo "TF_VAR_stage=${SERVICE_STAGE}" >> $GITHUB_ENV
+
+      - name: terraform format
+        run: terraform fmt -check
+
+      - name: terraform init
+        run: terraform init
+
+      - name: terraform validation
+        run: terraform validate -no-color
+
+      - name: terraform plan
+        id: plan
+        run: make pre-deploy
+        continue-on-error: true
+
+      - name: terraform plan status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+      - name: terraform apply
+        run: make deploy-dev
