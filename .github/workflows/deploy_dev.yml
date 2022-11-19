@@ -16,6 +16,7 @@ on:
         options:
           - dev-id
           - dev-sg
+          - dev-th
 
 env:
   PROJECT_ID: ${{ secrets.PROJECT_ID }}
