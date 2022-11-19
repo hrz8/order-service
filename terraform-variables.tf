@@ -20,5 +20,21 @@ locals {
       name   = "dev-sg"
       region = "us-central1"
     }
+    dev-th = {
+      name   = "dev-th"
+      region = "us-central1"
+    }
+    prod-id = {
+      name   = "prod-id"
+      region = "us-central1"
+    }
+    prod-sg = {
+      name   = "prod-sg"
+      region = "us-central1"
+    }
+    prod-th = {
+      name   = "prod-th"
+      region = "us-central1"
+    }
   }
 }
