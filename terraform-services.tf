@@ -116,4 +116,10 @@ resource "google_api_gateway_gateway" "api_gw" {
   provider   = google-beta
   api_config = google_api_gateway_api_config.api_cfg_0.id
   gateway_id = format("%s-api-gw", local.service_alias)
+
+  lifecycle {
+    replace_triggered_by = [
+      google_api_gateway_api_config.api_cfg_0.id
+    ]
+  }
 }
