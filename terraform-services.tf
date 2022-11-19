@@ -101,14 +101,14 @@ resource "google_api_gateway_api_config" "api_cfg" {
   }
 
   lifecycle {
-    create_before_destroy = false
+    create_before_destroy = true
   }
 
   depends_on = [
     google_project_service.apigateway,
     google_project_service.servicemanagement,
     google_project_service.servicecontrol,
-    google_cloud_run_service.service
+    google_cloud_run_service.service,
   ]
 }
 
@@ -118,12 +118,6 @@ resource "google_api_gateway_gateway" "api_gw" {
   gateway_id = format("%s-api-gw", local.service_alias)
 
   lifecycle {
-    replace_triggered_by = [
-      google_api_gateway_api_config.api_cfg.id
-    ]
+    ignore_changes = [gateway_id]
   }
-
-  depends_on = [
-    google_api_gateway_api_config.api_cfg
-  ]
 }
