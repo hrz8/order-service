@@ -14,7 +14,7 @@ func main() {
 		return c.JSON(http.StatusOK, struct {
 			Status  string
 			Version string
-		}{Status: "Ok!", Version: "v0.0.2"})
+		}{Status: "Ok!!", Version: "v0.0.2"})
 	})
 
 	e.GET("/api/v1/hello-again", func(c echo.Context) error {
