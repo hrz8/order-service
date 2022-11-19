@@ -92,6 +92,7 @@ jobs:
           echo "TF_VAR_service_name=${SERVICE_NAME}" >> $GITHUB_ENV
           echo "TF_VAR_service_account=${SERVICE_ACCOUNT}" >> $GITHUB_ENV
           echo "TF_VAR_stage=${SERVICE_STAGE}" >> $GITHUB_ENV
+          echo TF_VAR_image_tag=${{ needs.build_tag.outputs.image_tag }} >> $GITHUB_ENV
 
       - name: terraform format
         run: terraform fmt -check

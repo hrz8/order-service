@@ -68,6 +68,9 @@ resource "google_api_gateway_api_config" "api_cfg" {
                       Success:
                         type: string
                         example: 'Ok'
+                      Version:
+                        type: string
+                        example: 'v0.0.1'
                 400:
                   description: Bad Request
           '/hello-again':
