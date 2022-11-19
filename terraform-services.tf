@@ -24,7 +24,6 @@ resource "google_cloud_run_service" "service" {
 
 resource "google_api_gateway_api" "api" {
   provider = google-beta
-  project  = local.project_id
   api_id   = format("%s-api-gw", local.service_alias)
 
   depends_on = [
@@ -35,10 +34,9 @@ resource "google_api_gateway_api" "api" {
   ]
 }
 
-resource "google_api_gateway_api_config" "api" {
+resource "google_api_gateway_api_config" "api_cfg" {
   provider      = google-beta
   api           = google_api_gateway_api.api.api_id
-  project       = local.project_id
   api_config_id = format("%s-api-gw-cfg", local.service_alias)
 
   openapi_documents {
@@ -47,8 +45,8 @@ resource "google_api_gateway_api_config" "api" {
       contents = base64encode(<<-EOF
         swagger: '2.0'
         info:
-          title: order_service_api_gw Order Service
-          description: 'Endpoint documentation of order service'
+          title: ${format("%s-api-gw", local.service_alias)}
+          description: 'Endpoint documentation of ${local.service_name}'
           version: '1.0.0'
         produces:
           - application/json
@@ -63,7 +61,7 @@ resource "google_api_gateway_api_config" "api" {
               operationId: ping
               responses:
                 200:
-                  description: Success
+                  description: OK
                   schema:
                     type: object
                     properties:
@@ -79,7 +77,7 @@ resource "google_api_gateway_api_config" "api" {
               operationId: helloAgain
               responses:
                 200:
-                  description: Success
+                  description: OK
                   schema:
                     type: object
                     properties:
@@ -88,13 +86,6 @@ resource "google_api_gateway_api_config" "api" {
                         example: 'Ok'
                 400:
                   description: Bad Request
-        securityDefinitions:
-          APIKey:
-            type: apiKey
-            name: key
-            in: query
-        security:
-          - APIKey: []
       EOF
       )
     }
@@ -107,7 +98,7 @@ resource "google_api_gateway_api_config" "api" {
   }
 
   lifecycle {
-    create_before_destroy = true
+    create_before_destroy = false
   }
 
   depends_on = [
@@ -115,5 +106,21 @@ resource "google_api_gateway_api_config" "api" {
     google_project_service.servicemanagement,
     google_project_service.servicecontrol,
     google_cloud_run_service.service
+  ]
+}
+
+resource "google_api_gateway_gateway" "api_gw" {
+  provider   = google-beta
+  api_config = google_api_gateway_api_config.api_cfg.id
+  gateway_id = format("%s-api-gw", local.service_alias)
+
+  lifecycle {
+    replace_triggered_by = [
+      google_api_gateway_api_config.api_cfg.id
+    ]
+  }
+
+  depends_on = [
+    google_api_gateway_api_config.api_cfg
   ]
 }
